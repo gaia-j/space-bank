@@ -39,29 +39,29 @@ public class AuthController {
     }
 
     @RequestMapping("/login")
-    public ResponseEntity<String> login(@RequestBody @Valid AuthDTO data) {
+    public ResponseEntity<Map<String,String>> login(@RequestBody @Valid AuthDTO data) {
         if(this.accountRepository.findByEmail(data.email()) == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials.");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("error", "Invalid credentials."));
         }
 
         AccountModel account = this.accountRepository.findByEmail(data.email());
 
         if (!new BCryptPasswordEncoder().matches(data.password(), account.getPassword())) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials.");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("error", "Invalid credentials."));
         }
 
         String token = tokenService.GenerateToken(account.getEmail());
 
-        return ResponseEntity.ok().body(token);
+        return ResponseEntity.ok(Map.of("token", token));
     }
 
     @RequestMapping("/register")
-    public ResponseEntity<String> register(@RequestBody @Valid RegisterDTO data) {
+    public ResponseEntity<Map<String, String>> register(@RequestBody @Valid RegisterDTO data) {
         if (this.accountRepository.findByEmail(data.email()) != null) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("Email already registered.");
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(Map.of("error", "Email already registered."));
         }
         if (this.accountRepository.findByTaxId(data.taxId()) != null) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("CPF already registered.");
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(Map.of("error", "Tax ID already registered."));
         }
         String encryptedPassword = new BCryptPasswordEncoder().encode(data.password());
 
@@ -81,7 +81,7 @@ public class AuthController {
 
         accountRepository.save(newAccount);
 
-        return ResponseEntity.ok().body("Account created successfully.");
+        return ResponseEntity.ok().body(Map.of("message", "Account created successfully."));
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
