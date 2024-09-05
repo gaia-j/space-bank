@@ -1,0 +1,49 @@
+
+<div class="main">
+
+  <div class="form-container">
+    <form class="form" (submit)="login($event)">
+      <h1 class="form-title">Login</h1>
+      <div class="form-group">
+        <label for="email" class="form-label">Email</label>
+        <input type="email" id="email" class="form-input" [(ngModel)]="email" name="email"/>
+      </div>
+      <div class="form-group ">
+        <label for="password" class="form-label">Password</label>
+        <input type="password" id="password" class="form-input" [(ngModel)]="password" name="password"/>
+        <button class="form-button">Login</button>
+      </div>
+    </form>
+  </div>
+  <div class="form-container">
+    <form class="form" (submit)="register($event)">
+      <h1 class="form-title">Register</h1>
+      <div class="form-group">
+        <label for="registerName" class="form-label">Nome</label>
+        <input type="text" id="registerName" class="form-input" [(ngModel)]="registerName" name="registerUsername"/>
+      </div>
+      <div class="form-group">
+        <label for="registerTaxId" class="form-label">CPF</label>
+        <input type="text" id="registerTaxId" class="form-input" [(ngModel)]="registerTaxId" name="registerTaxId"/>
+      </div>
+      <div class="form-group">
+        <label for="registerBirthDate" class="form-label">Data de Nascimento</label>
+        <input type="text" id="registerBirthDate" class="form-input" [(ngModel)]="registerBirthDate" name="registerBirthDate"/>
+      </div>
+      <div class="form-group">
+        <label for="email" class="form-label">Email</label>
+        <input type="email" id="registerEmail" class="form-input" [(ngModel)]="registerEmail" name="registerEmail"/>
+      </div>
+      <div class="form-group">
+        <label for="registerPassword" class="form-label">Senha</label>
+        <input type="password" id="registerPassword" class="form-input" [(ngModel)]="registerPassword" name="registerPassword"/>
+      </div>
+      <div class="form-group">
+        <label for="registerConfirmPassword" class="form-label">Confirmar senha</label>
+        <input type="password" id="registerConfirmPassword" class="form-input" [(ngModel)]="registerConfirmPassword" name="registerConfirmPassword"/>
+        <button class="form-button">Register</button>
+      </div>
+    </form>
+
+  </div>
+</div>
