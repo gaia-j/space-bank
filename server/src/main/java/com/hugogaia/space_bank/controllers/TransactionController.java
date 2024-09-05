@@ -8,6 +8,7 @@ import com.hugogaia.space_bank.models.TransactionModel;
 import com.hugogaia.space_bank.repositories.AccountRepository;
 import com.hugogaia.space_bank.repositories.TransactionRepository;
 import com.hugogaia.space_bank.utils.CookiesUtils;
+import com.hugogaia.space_bank.utils.TaxIdUtils;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
@@ -165,5 +166,55 @@ public class TransactionController {
         return handleValidationExceptionss(ex);
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<Map<String, Object>> detailTransaction(@PathVariable UUID id, HttpServletRequest request, HttpServletResponse response) {
+
+        String token = cookiesUtils.getTokenFromCookies(request);
+
+        if (token == null) {
+            return ResponseEntity.status(401).body(Map.of("error", "Unauthorized"));
+        }
+
+        String email = tokenService.validateToken(token);
+
+        if (Objects.equals(email, "invalid")) {
+            return ResponseEntity.status(401).body(Map.of("error", "Unauthorized"));
+        }
+
+        AccountModel account = accountRepository.findByEmail(email);
+
+        if (account == null) {
+            return ResponseEntity.status(400).body(Map.of("error", "Account not found"));
+        }
+
+        TransactionModel transaction = transactionRepository.findTransactionByExternalId(id);
+
+        if (transaction == null) {
+            return ResponseEntity.status(400).body(Map.of("error", "Transaction not found"));
+        }
+
+        if (!Objects.equals(transaction.getOriginAccount(), account.getId()) && !Objects.equals(transaction.getDestinationAccount(), account.getId())) {
+            return ResponseEntity.status(400).body(Map.of("error", "Transaction not found"));
+        }
+
+        Optional<AccountModel> originAccount = accountRepository.findById(transaction.getOriginAccount());
+        Optional<AccountModel> destinationAccount = accountRepository.findById(transaction.getDestinationAccount());
+
+        String originTaxId = Objects.requireNonNull(originAccount.map(AccountModel::getTaxId).orElse(null));
+        String destinationTaxId = Objects.requireNonNull(destinationAccount.map(AccountModel::getTaxId).orElse(null));
+
+        originTaxId = TaxIdUtils.hideTaxId(originTaxId);
+        destinationTaxId = TaxIdUtils.hideTaxId(destinationTaxId);
+
+        return ResponseEntity.ok(Map.of(
+                "amount", transaction.getAmount(),
+                "time", transaction.getCreatedAt(),
+                "id", transaction.getExternalId(),
+                "origin", Objects.requireNonNull(originAccount.map(AccountModel::getName).orElse(null)),
+                "originTaxId", originTaxId,
+                "destination", Objects.requireNonNull(destinationAccount.map(AccountModel::getName).orElse(null)),
+                "detinationTaxId", destinationTaxId
+        ));
+    }
 
 }
