@@ -6,6 +6,9 @@ import com.hugogaia.space_bank.dtos.RegisterDTO;
 import com.hugogaia.space_bank.infra.security.TokenService;
 import com.hugogaia.space_bank.models.AccountModel;
 import com.hugogaia.space_bank.repositories.AccountRepository;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -39,7 +42,7 @@ public class AuthController {
     }
 
     @RequestMapping("/login")
-    public ResponseEntity<Map<String,String>> login(@RequestBody @Valid AuthDTO data) {
+    public ResponseEntity<Map<String,String>> login(@RequestBody @Valid AuthDTO data, HttpServletResponse response) {
         if(this.accountRepository.findByEmail(data.email()) == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("error", "Invalid credentials."));
         }
@@ -52,11 +55,19 @@ public class AuthController {
 
         String token = tokenService.GenerateToken(account.getEmail());
 
-        return ResponseEntity.ok(Map.of("token", token));
+        Cookie cookie = new Cookie("token", token);
+        cookie.setHttpOnly(true);
+
+        cookie.setPath("/");
+        cookie.setMaxAge(24 * 60 * 60);
+
+        response.addCookie(cookie);
+
+        return ResponseEntity.ok(Map.of("message","sucess"));
     }
 
     @RequestMapping("/register")
-    public ResponseEntity<Map<String, String>> register(@RequestBody @Valid RegisterDTO data) {
+    public ResponseEntity<Map<String, String>> register(@RequestBody @Valid RegisterDTO data, HttpServletResponse response) {
         if (this.accountRepository.findByEmail(data.email()) != null) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(Map.of("error", "Email already registered."));
         }
@@ -81,7 +92,17 @@ public class AuthController {
 
         accountRepository.save(newAccount);
 
-        return ResponseEntity.ok().body(Map.of("message", "Account created successfully."));
+        String token = tokenService.GenerateToken(newAccount.getEmail());
+
+        Cookie cookie = new Cookie("token", token);
+        cookie.setHttpOnly(true);
+
+        cookie.setPath("/");
+        cookie.setMaxAge(24 * 60 * 60);
+
+        response.addCookie(cookie);
+
+        return ResponseEntity.ok(Map.of("message","sucess"));
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
