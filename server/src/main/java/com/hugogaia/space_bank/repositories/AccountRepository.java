@@ -9,7 +9,12 @@ public interface AccountRepository extends JpaRepository<AccountModel, Long> {
 
 
     Optional<AccountModel> findById(Long id);
+    AccountModel findByAccountCode(String code);
     AccountModel findByEmail(String email);
     AccountModel findByTaxId(String taxId);
+
+    Boolean existsAccountModelByEmail(String email);
+    Boolean existsAccountModelByTaxId(String taxId);
+    Boolean existsAccountModelByAccountCode(String code);
 
 }

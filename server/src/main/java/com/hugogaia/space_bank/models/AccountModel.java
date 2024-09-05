@@ -19,16 +19,19 @@ public class AccountModel implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name="account_code", nullable = false, unique = true)
+    private String accountCode;
+
     @Column(name = "name",nullable = false)
     private String name;
 
     @Column(name = "birth_date", nullable = false)
     private LocalDate birthDate;
 
-    @Column(name = "tax_id", nullable = false)
+    @Column(name = "tax_id", nullable = false, unique = true)
     private String taxId;
 
-    @Column (name = "email",nullable = false)
+    @Column (name = "email",nullable = false, unique = true)
     private String email;
 
     @Column (name = "password",nullable = false)
@@ -57,7 +60,16 @@ public class AccountModel implements Serializable {
     public AccountModel() {
     }
 
-    public AccountModel(String name, LocalDate birthDate, String taxId, String email, String password, Long balance) {
+    public AccountModel(
+            String accountCode,
+            String name,
+            LocalDate birthDate,
+            String taxId,
+            String email,
+            String password,
+            Long balance
+    ) {
+        this.accountCode = accountCode;
         this.name = name;
         this.birthDate = birthDate;
         this.taxId = taxId;
@@ -72,6 +84,14 @@ public class AccountModel implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getAccountCode() {
+        return accountCode;
+    }
+
+    public void setAccountCode(String accountCode) {
+        this.accountCode = accountCode;
     }
 
     public String getName() {

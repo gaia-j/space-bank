@@ -7,6 +7,7 @@ import com.hugogaia.space_bank.infra.security.TokenService;
 import com.hugogaia.space_bank.models.AccountModel;
 import com.hugogaia.space_bank.repositories.AccountRepository;
 import com.hugogaia.space_bank.utils.CookiesUtils;
+import com.hugogaia.space_bank.utils.GenerateAccountCode;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,10 +63,10 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<Map<String, String>> register(@RequestBody @Valid RegisterDTO data, HttpServletResponse response) {
-        if (this.accountRepository.findByEmail(data.email()) != null) {
+        if (this.accountRepository.existsAccountModelByEmail(data.email())) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(Map.of("error", "Email already registered."));
         }
-        if (this.accountRepository.findByTaxId(data.taxId()) != null) {
+        if (this.accountRepository.existsAccountModelByTaxId(data.taxId())) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(Map.of("error", "Tax ID already registered."));
         }
         String encryptedPassword = new BCryptPasswordEncoder().encode(data.password());
@@ -75,7 +76,17 @@ public class AuthController {
         long maxValue = 4000000L;
         long randomNumber = minValue + (long)(random.nextDouble() * (maxValue - minValue + 1));
 
+        String accountCode = GenerateAccountCode.generateAccountCode();
+
+        Boolean accountCodeExists = accountRepository.existsAccountModelByAccountCode(accountCode);
+
+        while (accountCodeExists) {
+            accountCode = GenerateAccountCode.generateAccountCode();
+            accountCodeExists = accountRepository.existsAccountModelByAccountCode(accountCode);
+        }
+
         AccountModel newAccount = new AccountModel(
+                accountCode,
                 data.name(),
                 data.birthDate(),
                 data.taxId(),
