@@ -12,9 +12,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,7 +31,12 @@ public class TransactionController {
     private final TokenService tokenService;
 
     @Autowired
-    public TransactionController(TransactionRepository transactionRepository, CookiesUtils cookiesUtils, TokenService tokenService, AccountRepository accountRepository) {
+    public TransactionController(
+            TransactionRepository transactionRepository,
+            CookiesUtils cookiesUtils,
+            TokenService tokenService,
+            AccountRepository accountRepository
+    ) {
         this.transactionRepository = transactionRepository;
         this.accountRepository = accountRepository;
         this.cookiesUtils = cookiesUtils;
