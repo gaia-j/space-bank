@@ -18,10 +18,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -41,7 +38,7 @@ public class AuthController {
         this.tokenService = tokenService;
     }
 
-    @RequestMapping("/login")
+    @PostMapping("/login")
     public ResponseEntity<Map<String,String>> login(@RequestBody @Valid AuthDTO data, HttpServletResponse response) {
         if(this.accountRepository.findByEmail(data.email()) == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("error", "Invalid credentials."));
@@ -66,7 +63,7 @@ public class AuthController {
         return ResponseEntity.ok(Map.of("message","sucess"));
     }
 
-    @RequestMapping("/register")
+    @PostMapping("/register")
     public ResponseEntity<Map<String, String>> register(@RequestBody @Valid RegisterDTO data, HttpServletResponse response) {
         if (this.accountRepository.findByEmail(data.email()) != null) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(Map.of("error", "Email already registered."));
