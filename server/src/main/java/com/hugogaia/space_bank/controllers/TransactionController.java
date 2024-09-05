@@ -119,7 +119,7 @@ public class TransactionController {
         }
 
         AccountModel originAccount = accountRepository.findByEmail(originEmail);
-        AccountModel destinationAccount = accountRepository.findByTaxId(data.destinationTaxId());
+        AccountModel destinationAccount = accountRepository.findByAccountCode(data.destinationAccountCode());
 
         if (originAccount == null) {
             return ResponseEntity.status(400).body(Map.of("error", "Account not found"));

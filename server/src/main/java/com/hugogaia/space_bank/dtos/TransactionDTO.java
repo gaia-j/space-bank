@@ -6,8 +6,8 @@ import jakarta.validation.constraints.NotNull;
 import java.util.UUID;
 
 public record TransactionDTO(
-        @NotBlank(message = "Destination tax ID is required")
-        String destinationTaxId,
+        @NotBlank(message = "Destination account code is required")
+        String destinationAccountCode,
 
         @NotNull(message = "Amount is required")
         Long amount
