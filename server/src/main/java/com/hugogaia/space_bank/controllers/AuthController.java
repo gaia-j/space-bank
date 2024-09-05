@@ -6,6 +6,7 @@ import com.hugogaia.space_bank.dtos.RegisterDTO;
 import com.hugogaia.space_bank.infra.security.TokenService;
 import com.hugogaia.space_bank.models.AccountModel;
 import com.hugogaia.space_bank.repositories.AccountRepository;
+import com.hugogaia.space_bank.utils.CookiesUtils;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -24,6 +25,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
+import static com.hugogaia.space_bank.utils.ExceptionHandlers.handleValidationExceptionss;
+
 @RestController
 @RequestMapping("auth")
 public class AuthController {
@@ -31,11 +34,17 @@ public class AuthController {
 
     private final AccountRepository accountRepository;
     private final TokenService tokenService;
+    private final CookiesUtils cookiesUtils;
 
     @Autowired
-    public AuthController(AuthenticationManager authenticationManager, AccountRepository accountRepository, TokenService tokenService) {
+    public AuthController(
+            AccountRepository accountRepository,
+            TokenService tokenService,
+            CookiesUtils cookiesUtils
+    ){
         this.accountRepository = accountRepository;
         this.tokenService = tokenService;
+        this.cookiesUtils = cookiesUtils;
     }
 
     @PostMapping("/login")
@@ -52,13 +61,7 @@ public class AuthController {
 
         String token = tokenService.GenerateToken(account.getEmail());
 
-        Cookie cookie = new Cookie("token", token);
-        cookie.setHttpOnly(true);
-
-        cookie.setPath("/");
-        cookie.setMaxAge(24 * 60 * 60);
-
-        response.addCookie(cookie);
+        cookiesUtils.setTokenCookie(token, response);
 
         return ResponseEntity.ok(Map.of("message","sucess"));
     }
@@ -91,27 +94,14 @@ public class AuthController {
 
         String token = tokenService.GenerateToken(newAccount.getEmail());
 
-        Cookie cookie = new Cookie("token", token);
-        cookie.setHttpOnly(true);
-
-        cookie.setPath("/");
-        cookie.setMaxAge(24 * 60 * 60);
-
-        response.addCookie(cookie);
+        cookiesUtils.setTokenCookie(token, response);
 
         return ResponseEntity.ok(Map.of("message","sucess"));
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String, String>> handleValidationExceptions(MethodArgumentNotValidException ex) {
-        Map<String, String> errors = new HashMap<>();
-
-        ex.getBindingResult().getAllErrors().forEach((error) -> {
-            String fieldName = ((FieldError) error).getField();
-            String errorMessage = error.getDefaultMessage();
-            errors.put(fieldName, errorMessage);
-        });
-
-        return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+        return handleValidationExceptionss(ex);
     }
+
 }
