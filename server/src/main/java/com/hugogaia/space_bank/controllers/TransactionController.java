@@ -2,13 +2,11 @@ package com.hugogaia.space_bank.controllers;
 
 
 import com.hugogaia.space_bank.dtos.TransactionDTO;
-import com.hugogaia.space_bank.infra.security.TokenService;
 import com.hugogaia.space_bank.models.AccountModel;
 import com.hugogaia.space_bank.models.TransactionModel;
 import com.hugogaia.space_bank.repositories.AccountRepository;
 import com.hugogaia.space_bank.repositories.TransactionRepository;
 import com.hugogaia.space_bank.services.AuthorizationService;
-import com.hugogaia.space_bank.utils.CookiesUtils;
 import com.hugogaia.space_bank.utils.TaxIdUtils;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -17,7 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
-
 import java.time.LocalDateTime;
 import java.util.*;
 
