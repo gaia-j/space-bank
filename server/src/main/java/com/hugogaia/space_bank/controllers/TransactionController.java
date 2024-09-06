@@ -43,10 +43,6 @@ public class TransactionController {
 
         AccountModel account = authorizationService.authorize(request);
 
-        if (account == null) {
-            return ResponseEntity.status(400).build();
-        }
-
         Long accountId = account.getId();
 
         List<Map<String, Object>> transactions = new ArrayList<>();
@@ -93,10 +89,6 @@ public class TransactionController {
 
         AccountModel destinationAccount = accountRepository.findByAccountCode(data.destinationAccountCode());
 
-        if (originAccount == null) {
-            return ResponseEntity.status(400).body(Map.of("error", "Account not found"));
-        }
-
         if (destinationAccount == null) {
             return ResponseEntity.status(400).body(Map.of("error", "Destination account not found"));
         }
@@ -141,10 +133,6 @@ public class TransactionController {
     public ResponseEntity<Map<String, Object>> detailTransaction(@PathVariable UUID id, HttpServletRequest request, HttpServletResponse response) {
 
         AccountModel account = authorizationService.authorize(request);
-
-        if (account == null) {
-            return ResponseEntity.status(400).body(Map.of("error", "Account not found"));
-        }
 
         TransactionModel transaction = transactionRepository.findTransactionByExternalId(id);
 

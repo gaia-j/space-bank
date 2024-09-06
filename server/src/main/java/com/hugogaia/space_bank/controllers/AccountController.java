@@ -23,6 +23,24 @@ public class AccountController {
 
         AccountModel account = authorizationService.authorize(request);
 
+        String taxId = TaxIdUtils.hideTaxId(account.getTaxId());
+
+        return ResponseEntity.ok(Map.of(
+                "accountCode", account.getAccountCode(),
+                "name", account.getName(),
+                "email", account.getEmail(),
+                "taxId", taxId,
+                "balance", account.getBalance(),
+                "birthDate", account.getBirthDate()
+        ));
+        
+    }
+
+    @GetMapping("/account/{accountCode}")
+    public ResponseEntity<Map<String,Object>> detailAccountByCode(HttpServletRequest request) {
+
+        AccountModel account = authorizationService.authorize(request);
+
         if (account == null) {
             return ResponseEntity.status(401).body(Map.of("error", "Unauthorized"));
         }
@@ -37,7 +55,7 @@ public class AccountController {
                 "balance", account.getBalance(),
                 "birthDate", account.getBirthDate()
         ));
-        
+
     }
 
 }
