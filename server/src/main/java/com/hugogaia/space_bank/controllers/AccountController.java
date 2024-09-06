@@ -41,10 +41,6 @@ public class AccountController {
 
         AccountModel account = authorizationService.authorize(request);
 
-        if (account == null) {
-            return ResponseEntity.status(401).body(Map.of("error", "Unauthorized"));
-        }
-
         String taxId = TaxIdUtils.hideTaxId(account.getTaxId());
 
         return ResponseEntity.ok(Map.of(
