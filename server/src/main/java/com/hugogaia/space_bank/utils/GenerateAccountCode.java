@@ -1,7 +1,6 @@
 package com.hugogaia.space_bank.utils;
 
 public class GenerateAccountCode {
-    // Generate a random account code in the format A1AAA111
     public static String generateAccountCode() {
         StringBuilder accountCode = new StringBuilder();
         String letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
