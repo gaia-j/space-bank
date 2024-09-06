@@ -7,6 +7,7 @@ import com.hugogaia.space_bank.models.AccountModel;
 import com.hugogaia.space_bank.models.TransactionModel;
 import com.hugogaia.space_bank.repositories.AccountRepository;
 import com.hugogaia.space_bank.repositories.TransactionRepository;
+import com.hugogaia.space_bank.services.AuthorizationService;
 import com.hugogaia.space_bank.utils.CookiesUtils;
 import com.hugogaia.space_bank.utils.TaxIdUtils;
 import jakarta.servlet.http.HttpServletRequest;
@@ -28,38 +29,22 @@ public class TransactionController {
 
     private final TransactionRepository transactionRepository;
     private final AccountRepository accountRepository;
-    private final CookiesUtils cookiesUtils;
-    private final TokenService tokenService;
+    private final AuthorizationService authorizationService;
 
     @Autowired
     public TransactionController(
             TransactionRepository transactionRepository,
-            CookiesUtils cookiesUtils,
-            TokenService tokenService,
-            AccountRepository accountRepository
-    ) {
+            AccountRepository accountRepository,
+            AuthorizationService authorizationService) {
         this.transactionRepository = transactionRepository;
         this.accountRepository = accountRepository;
-        this.cookiesUtils = cookiesUtils;
-        this.tokenService = tokenService;
+        this.authorizationService = authorizationService;
     }
 
     @GetMapping("/list")
     public ResponseEntity<List<Map<String, Object>>> listTransaction(HttpServletRequest request, HttpServletResponse response) {
 
-        String token = cookiesUtils.getTokenFromCookies(request);
-
-        if (token == null) {
-            return ResponseEntity.status(401).build();
-        }
-
-        String email = tokenService.validateToken(token);
-
-        if (Objects.equals(email, "invalid")) {
-            return ResponseEntity.status(401).build();
-        }
-
-        AccountModel account = accountRepository.findByEmail(email);
+        AccountModel account = authorizationService.authorize(request);
 
         if (account == null) {
             return ResponseEntity.status(400).build();
@@ -107,19 +92,8 @@ public class TransactionController {
     @PostMapping("/send")
     public ResponseEntity<Map<String,String>> sendTransaction(@RequestBody @Valid TransactionDTO data, HttpServletRequest request, HttpServletResponse response) {
 
-        String token = cookiesUtils.getTokenFromCookies(request);
+        AccountModel originAccount = authorizationService.authorize(request);
 
-        if (token == null) {
-            return ResponseEntity.status(401).body(Map.of("error", "Unauthorized"));
-        }
-
-        String originEmail = tokenService.validateToken(token);
-
-        if (Objects.equals(originEmail, "invalid")) {
-            return ResponseEntity.status(401).body(Map.of("error", "Unauthorized"));
-        }
-
-        AccountModel originAccount = accountRepository.findByEmail(originEmail);
         AccountModel destinationAccount = accountRepository.findByAccountCode(data.destinationAccountCode());
 
         if (originAccount == null) {
@@ -169,19 +143,7 @@ public class TransactionController {
     @GetMapping("/{id}")
     public ResponseEntity<Map<String, Object>> detailTransaction(@PathVariable UUID id, HttpServletRequest request, HttpServletResponse response) {
 
-        String token = cookiesUtils.getTokenFromCookies(request);
-
-        if (token == null) {
-            return ResponseEntity.status(401).body(Map.of("error", "Unauthorized"));
-        }
-
-        String email = tokenService.validateToken(token);
-
-        if (Objects.equals(email, "invalid")) {
-            return ResponseEntity.status(401).body(Map.of("error", "Unauthorized"));
-        }
-
-        AccountModel account = accountRepository.findByEmail(email);
+        AccountModel account = authorizationService.authorize(request);
 
         if (account == null) {
             return ResponseEntity.status(400).body(Map.of("error", "Account not found"));

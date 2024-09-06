@@ -3,6 +3,7 @@ package com.hugogaia.space_bank.controllers;
 import com.hugogaia.space_bank.infra.security.TokenService;
 import com.hugogaia.space_bank.models.AccountModel;
 import com.hugogaia.space_bank.repositories.AccountRepository;
+import com.hugogaia.space_bank.services.AuthorizationService;
 import com.hugogaia.space_bank.utils.CookiesUtils;
 import com.hugogaia.space_bank.utils.TaxIdUtils;
 import jakarta.servlet.http.HttpServletRequest;
@@ -18,33 +19,16 @@ import java.util.Objects;
 @RestController
 public class AccountController {
 
-    private final CookiesUtils cookiesUtils;
-    private final TokenService tokenService;
-    private final AccountRepository accountRepository;
+    private final AuthorizationService authorizationService;
 
-    public AccountController(CookiesUtils cookiesUtils, TokenService tokenService, AccountRepository accountRepository) {
-        this.cookiesUtils = cookiesUtils;
-        this.tokenService = tokenService;
-        this.accountRepository = accountRepository;
-
+    public AccountController(AuthorizationService authorizationService) {
+        this.authorizationService = authorizationService;
     }
 
     @GetMapping("/account")
     public ResponseEntity<Map<String,Object>> detailAccount(HttpServletRequest request) {
 
-        String token = cookiesUtils.getTokenFromCookies(request);
-
-        if (token == null) {
-            return ResponseEntity.status(401).body(Map.of("error", "Unauthorized"));
-        }
-
-        String email = tokenService.validateToken(token);
-
-        if (Objects.equals(email, "invalid")) {
-            return ResponseEntity.status(401).body(Map.of("error", "Unauthorized"));
-        }
-
-        AccountModel account = accountRepository.findByEmail(email);
+        AccountModel account = authorizationService.authorize(request);
 
         if (account == null) {
             return ResponseEntity.status(401).body(Map.of("error", "Unauthorized"));
