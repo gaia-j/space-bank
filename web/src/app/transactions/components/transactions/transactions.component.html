@@ -1,0 +1,15 @@
+<div class="main">
+
+  <div *ngFor="let transaction of transactions " class="account-container">
+    <span>Id: {{transaction.id}}</span>
+    <span>Nome: {{transaction.name}}</span>
+    <span>Tipo: {{transaction.type}}</span>
+    <span>Valor:R$ {{transaction.amount/100}}</span>
+    <span>Data: {{transaction.time | date: 'dd/MM/yyyy'}}</span>
+
+  </div>
+  <div>
+    <button class="form-button" (click)="back()">Voltar</button>
+  </div>
+</div>
+

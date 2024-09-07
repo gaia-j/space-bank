@@ -1,0 +1,47 @@
+.main{
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  gap: 15px;
+  height: 100vmin;
+  color: #4a4a4a;
+}
+
+button{
+  cursor: pointer;
+}
+
+.account-container{
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  background-color: #fff;
+  min-width: 300px;
+  border-radius: 6px;
+  padding: 20px;
+  box-shadow: 0 0 10px 4px rgba(0, 0, 0, 0.1);
+}
+
+.destination-title{
+  font-weight: 600;
+  font-size: 1.1rem;
+  margin-bottom: 15px;
+}
+
+.form-button{
+  background-color: #D169CC;
+  padding: 10px;
+  margin: 5px;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  min-width: 300px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition-duration: 0.25s;
+}
+
+.form-button:hover{
+  background-color: #C25EBC;
+}

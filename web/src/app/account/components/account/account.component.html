@@ -1,0 +1,53 @@
+<div class="main">
+  <div class="user">
+    <span class="username">Olá, {{name}}!</span>
+    <span class="account-code">ID: {{accountCode}}</span>
+    <div class="balance-container">
+      <span class="balance-text">
+        Saldo
+      </span>
+      <span class="balance-amount">
+        <span class="balance-currency">R$</span> {{balance/100}}
+      </span>
+    </div>
+  </div>
+  <div class="action-buttons">
+    <div class="action-button-container">
+      <a class="action-button" routerLink="/transactions/send" routerLinkActive="active">
+        <svg-icon
+          class="icon icon-transfer"
+          src="assets/transfer.svg"
+          [svgStyle]="{ 'width.px':25, 'height.px':25 }"
+        ></svg-icon>
+      </a>
+      <span class="action-button-text">Transferir</span>
+    </div>
+
+    <div class="action-button-container">
+      <a class="action-button" routerLink="/transactions" routerLinkActive="active">
+        <svg-icon
+          class="icon icon-invoice"
+          src="assets/invoice.svg"
+          [svgStyle]="{ 'width.px':25, 'height.px':25 }"
+        ></svg-icon>
+      </a>
+      <span class="action-button-text">Extrato</span>
+
+    </div>
+
+    <div class="action-button-container">
+      <a class="action-button" routerLink="/account/detail" routerLinkActive="active">
+        <svg-icon
+          class="icon icon-data"
+          src="assets/data.svg"
+          [svgStyle]="{ 'width.px':25, 'height.px':25 }"
+        ></svg-icon>
+      </a>
+      <span class="action-button-text">Dados</span>
+    </div>
+
+  </div>
+  <div class="extra">
+    <a class="card" routerLink="/auth" routerLinkActive="active">Sair</a>
+  </div>
+</div>

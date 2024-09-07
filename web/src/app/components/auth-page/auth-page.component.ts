@@ -1,17 +1,23 @@
 import {Component, inject} from '@angular/core';
 import {HttpClient, provideHttpClient} from "@angular/common/http";
 import {FormsModule} from "@angular/forms";
+import {Router} from "@angular/router";
+import {NgIf} from "@angular/common";
 
 @Component({
   selector: 'app-auth-page',
   standalone: true,
   imports: [
-    FormsModule
+    FormsModule,
+    NgIf
   ],
   templateUrl: './auth-page.component.html',
   styleUrl: './auth-page.component.css'
 })
 export class AuthPageComponent {
+
+  private _isLogin: boolean = true;
+
   private _email: string = '';
   private _password: string = '';
 
@@ -23,6 +29,8 @@ export class AuthPageComponent {
   private _registerBirthDate: string = '';
 
   http = inject(HttpClient);
+
+  router = inject(Router);
 
   get email(): string {
     return this._email;
@@ -88,14 +96,23 @@ export class AuthPageComponent {
     this._registerBirthDate = value;
   }
 
+  get isLogin(): boolean {
+    return this._isLogin;
+  }
+
+  set isLogin(value: boolean) {
+    this._isLogin = value
+  }
+
   login(e: Event): void {
     e.preventDefault()
     this.http.post('http://localhost:8080/auth/login', {
       email: this._email,
       password: this._password
-    }).subscribe({
+    },{ withCredentials: true }).subscribe({
       next: (response) => {
         console.log(response);
+        this.router.navigate(['/account']).then(r => console.log(r));
         },
       error: (error) => {
         console.error(error);
@@ -113,15 +130,19 @@ export class AuthPageComponent {
       confirmPassword: this._registerConfirmPassword,
       taxId: this._registerTaxId,
       birthDate: this._registerBirthDate
-    }).subscribe({
+    },{ withCredentials: true }).subscribe({
       next: (response) => {
-        console.log(response);
+        this.router.navigate(['/account']).then(r => console.log(r));
         },
       error: (error) => {
         console.error(error);
         },
       }
     );
+  }
+
+  change(): void {
+    this._isLogin = !this._isLogin;
   }
 }
 

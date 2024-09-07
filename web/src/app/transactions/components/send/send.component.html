@@ -1,0 +1,37 @@
+<div class="main">
+  <div class="search-container">
+    <span class="destination-title">Para qual conta deseja transferir?</span>
+    <form>
+      <div class="form-search-container">
+        <input
+          type="text"
+          id="searchDestinationAccount"
+          class="form-input"
+          [(ngModel)]="searchDestinationAccount"
+          name="searchDestinationAccount"
+        />
+        <button class="form-button form-button-search" (click)="searchAccount()">Buscar</button>
+      </div>
+    </form>
+  </div>
+  <div *ngIf="consulted" class="account-container">
+    <span class="account-title">Verifique os dados</span>
+    <span>Nome: {{ destinationName }}</span>
+    <span>CPF: {{ destinationTaxId }}</span>
+  </div>
+  <div *ngIf="consulted"  class="account-container">
+    <div class="form-container">
+      <form class="form" (submit)="sendMoney($event)">
+        <span class="form-title">Digite o valor</span>
+        <div class="form-group">
+          <input type="number" id="amount" class="form-input" [(ngModel)]="amount" name="account"/>
+        </div>
+      </form>
+    </div>
+  </div>
+  <div>
+    <button *ngIf="consulted" class="form-button" (click)="sendMoney($event)">Enviar</button>
+    <button class="form-button" (click)="back()">Voltar</button>
+  </div>
+</div>
+

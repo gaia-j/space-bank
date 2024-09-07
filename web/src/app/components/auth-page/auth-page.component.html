@@ -1,7 +1,7 @@
 
 <div class="main">
 
-  <div class="form-container">
+  <div *ngIf="isLogin" class="form-container">
     <form class="form" (submit)="login($event)">
       <h1 class="form-title">Login</h1>
       <div class="form-group">
@@ -14,8 +14,9 @@
         <button class="form-button">Login</button>
       </div>
     </form>
+    <a (click)="change()">Não tenho uma conta</a>
   </div>
-  <div class="form-container">
+  <div *ngIf="!isLogin" class="form-container">
     <form class="form" (submit)="register($event)">
       <h1 class="form-title">Register</h1>
       <div class="form-group">
@@ -44,6 +45,7 @@
         <button class="form-button">Register</button>
       </div>
     </form>
-
+    <a (click)="change()">Tenho uma conta</a>
   </div>
+
 </div>
