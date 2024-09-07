@@ -48,6 +48,10 @@ public class AccountController {
 
         AccountModel desiredAccount = accountRepository.findByAccountCode(accountCode);
 
+        if (desiredAccount == null) {
+            return ResponseEntity.notFound().build();
+        }
+
         String taxId = TaxIdUtils.hideTaxId(desiredAccount.getTaxId());
 
         return ResponseEntity.ok(Map.of(
