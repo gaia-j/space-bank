@@ -1,20 +1,54 @@
 
 
 .main {
-  height: 100vmin;
+  height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
-  background: rgb(2,0,36);
-  background: radial-gradient(circle, rgba(2,0,36,1) 0%, rgba(74,20,116,1) 5%, rgba(37,5,68,1) 13%, rgba(146,52,176,1) 22%, rgba(64,12,112,1) 23%, rgba(12,2,36,1) 79%);
+  color: #4a4a4a;
+  font-size: 5rem;
+  @media (max-width: 768px){
+    padding: 10px;
+  }
 }
 
-.form-container {
-  background-color: rgba(255, 255, 255, 0.8);
+.container{
+  display: flex;
+  justify-content: center;
+  /*align-items: center;*/
+  flex-direction: row;
+  width: 100%;
+  max-width: 650px;
+  flex-wrap: wrap;
+  background-color: rgb(255, 255, 255);
   padding: 20px;
   border-radius: 10px;
   box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+  /*box-shadow: 0 0 100px 50px rgba(0, 0, 0, 1);*/
 }
+
+.form-container{
+  width: 100%;
+}
+
+.col{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 50%;
+  @media (max-width: 768px){
+    width: 100%;
+  }
+}
+
+
+.img-container{
+  margin-right: 10px;
+  width: 40%;
+  min-width: 274px;
+}
+
 
 h1,h2{
   margin: 0;
@@ -26,4 +60,79 @@ a{
   font-size: 0.8rem;
   margin-top: 10px;
   cursor: pointer;
+}
+
+.bg-form{
+  width: 20rem;
+  height: 20rem;
+}
+
+.form-input{
+  width: 100%;
+  max-width: 240px;
+  margin-bottom: 7px;
+  border-radius: 7px;
+  border: solid 2px #D169CC;
+  padding: 10px;
+  color: #4a4a4a;
+  font-size: 1.1rem;
+  @media (max-width: 768px){
+    max-width: 90%;
+  }
+}
+
+.form-input:focus{
+  outline: none;
+  border-color: #c58bc1;
+}
+
+.input-container{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 100%;
+}
+
+.form-title{
+  font-size: 2rem;
+  font-weight: 600;
+}
+
+.first-input{
+  margin-top: 15px;
+}
+
+.form-button{
+  width: 100%;
+  max-width: 240px;
+  border: solid 2px #D169CC;
+  background-color: #D169CC;
+  margin-top: 15px;
+  padding: 10px;
+  border-radius: 7px;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.25s;
+}
+
+.form-button:hover{
+  background-color: #fff;
+  color: #D169CC;
+}
+
+.form{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 100%;
+}
+
+.link-container{
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

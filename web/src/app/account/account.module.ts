@@ -14,7 +14,6 @@ import {HttpClientModule} from "@angular/common/http";
     AccountComponent,
     SvgIconComponent,
     HttpClientModule,
-    SvgIconComponent,
   ],
   providers: [
     provideAngularSvgIcon(),

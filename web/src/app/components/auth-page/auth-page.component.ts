@@ -1,15 +1,17 @@
 import {Component, inject} from '@angular/core';
-import {HttpClient, provideHttpClient} from "@angular/common/http";
+import {HttpClient} from "@angular/common/http";
 import {FormsModule} from "@angular/forms";
 import {Router} from "@angular/router";
-import {NgIf} from "@angular/common";
+import {NgIf, NgOptimizedImage} from "@angular/common";
+import {CpfMask} from "../../utils/CpfMask";
 
 @Component({
   selector: 'app-auth-page',
   standalone: true,
   imports: [
     FormsModule,
-    NgIf
+    NgIf,
+    NgOptimizedImage
   ],
   templateUrl: './auth-page.component.html',
   styleUrl: './auth-page.component.css'
@@ -37,6 +39,8 @@ export class AuthPageComponent {
   }
 
   set email(value: string) {
+    console.log(value);
+    value = value.replace(/\s+/g, "");
     this._email = value;
   }
 
@@ -81,11 +85,11 @@ export class AuthPageComponent {
   }
 
   get registerTaxId(): string {
-    return this._registerTaxId;
+    return CpfMask.unmask(this._registerTaxId);
   }
 
   set registerTaxId(value: string) {
-    this._registerTaxId = value;
+    this._registerTaxId = CpfMask.mask(value);
   }
 
   get registerBirthDate(): string {
