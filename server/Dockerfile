@@ -1,4 +1,4 @@
-FROM maven:3.8.6-openjdk-17-alpine as build
+FROM ubuntu:latest as build
 
 WORKDIR /app
 
