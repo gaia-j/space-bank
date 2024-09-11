@@ -23,15 +23,10 @@ public class CookiesUtils {
     }
 
     public void setTokenCookie(String token, HttpServletResponse response) {
-        String domain = "localhost";
-        if(System.getenv("prod") != null) {
-            domain = "space-bank.onrender.com";
-        }
         Cookie cookie = new Cookie("token", token);
         cookie.setHttpOnly(true);
         cookie.setPath("/");
         cookie.setMaxAge(24 * 60 * 60);
-        cookie.setDomain(domain);
         response.setHeader("Set-Cookie", "key=value; HttpOnly; SameSite=none; Secure");
         response.addCookie(cookie);
     }
