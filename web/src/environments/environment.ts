@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiUrl: 'tbd',
+  apiUrl: 'https://space-bank-back.onrender.com',
 };
