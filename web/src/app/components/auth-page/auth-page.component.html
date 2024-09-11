@@ -20,6 +20,7 @@
                 id="email"
                 class="form-input first-input"
                 [(ngModel)]="email"
+                (input)="InputHelpers.emailHelper($event)"
                 name="email"
                 placeholder="Email"
               />
@@ -52,6 +53,7 @@
                 id="registerName"
                 class="form-input first-input"
                 [(ngModel)]="registerName"
+                (input)="InputHelpers.nameHelper($event)"
                 name="registerUsername"
                 placeholder="Nome"
               />
@@ -62,16 +64,19 @@
                 id="registerTaxId"
                 class="form-input"
                 [(ngModel)]="registerTaxId"
+                (input)="InputHelpers.taxIdMask($event)"
+                maxlength="14"
                 name="registerTaxId"
                 placeholder="CPF"
               />
             </div>
             <div class="input-container">
               <input
-                type="text"
+                type="date"
                 id="registerBirthDate"
                 class="form-input"
                 [(ngModel)]="registerBirthDate"
+                (input)="InputHelpers.birthDateHelper($event)"
                 name="registerBirthDate"
                 placeholder="Data de nascimento"
               />
@@ -82,6 +87,7 @@
                 id="registerEmail"
                 class="form-input"
                 [(ngModel)]="registerEmail"
+                (input)="InputHelpers.emailHelper($event)"
                 name="registerEmail"
                 placeholder="Email"
               />

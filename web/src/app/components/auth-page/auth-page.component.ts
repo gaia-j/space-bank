@@ -4,6 +4,8 @@ import {FormsModule} from "@angular/forms";
 import {Router} from "@angular/router";
 import {NgIf, NgOptimizedImage} from "@angular/common";
 import {CpfMask} from "../../utils/CpfMask";
+import {InputHelpers} from "../../utils/InputHelpers";
+import {urls} from "../../../urls";
 
 @Component({
   selector: 'app-auth-page',
@@ -39,8 +41,6 @@ export class AuthPageComponent {
   }
 
   set email(value: string) {
-    console.log(value);
-    value = value.replace(/\s+/g, "");
     this._email = value;
   }
 
@@ -85,11 +85,11 @@ export class AuthPageComponent {
   }
 
   get registerTaxId(): string {
-    return CpfMask.unmask(this._registerTaxId);
+    return this._registerTaxId
   }
 
   set registerTaxId(value: string) {
-    this._registerTaxId = CpfMask.mask(value);
+    this._registerTaxId = value;
   }
 
   get registerBirthDate(): string {
@@ -110,7 +110,7 @@ export class AuthPageComponent {
 
   login(e: Event): void {
     e.preventDefault()
-    this.http.post('http://localhost:8080/auth/login', {
+    this.http.post(urls.login, {
       email: this._email,
       password: this._password
     },{ withCredentials: true }).subscribe({
@@ -127,7 +127,7 @@ export class AuthPageComponent {
 
   register(e:Event): void {
     e.preventDefault()
-    this.http.post('http://localhost:8080/auth/register', {
+    this.http.post(urls.register, {
       name: this._registerName,
       email: this._registerEmail,
       password: this._registerPassword,
@@ -148,5 +148,7 @@ export class AuthPageComponent {
   change(): void {
     this._isLogin = !this._isLogin;
   }
+
+  protected readonly InputHelpers = InputHelpers;
 }
 

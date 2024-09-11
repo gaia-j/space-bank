@@ -4,6 +4,7 @@ import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {RouterLink, RouterLinkActive} from "@angular/router";
 import {NgOptimizedImage} from "@angular/common";
 import {SvgIconComponent} from "angular-svg-icon";
+import {urls} from "../../../../urls";
 
 @Component({
   selector: 'app-account',
@@ -94,7 +95,7 @@ export class AccountComponent {
   }
 
   loadAccount(): void {
-    this.http.get('http://localhost:8080/account',{
+    this.http.get(urls.account,{
       withCredentials: true
     })
       .subscribe({

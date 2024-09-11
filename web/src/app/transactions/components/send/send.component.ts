@@ -4,6 +4,7 @@ import {HttpClient} from "@angular/common/http";
 import {Router, RouterLink, RouterLinkActive} from "@angular/router";
 import {SvgIconComponent} from "angular-svg-icon";
 import {NgIf} from "@angular/common";
+import {urls} from "../../../../urls";
 
 @Component({
   selector: 'app-send',
@@ -79,7 +80,7 @@ export class SendComponent {
 
   sendMoney(e: Event): void {
     e.preventDefault();
-    this.http.post('http://localhost:8080/transaction/send', {
+    this.http.post(urls.createTransaction, {
       destinationAccountCode: this.destinationAccountCode,
       amount: this.amount*100
     }, {
@@ -97,7 +98,7 @@ export class SendComponent {
   }
 
   searchAccount(): void{
-    this.http.get('http://localhost:8080/account/' + this.searchDestinationAccount, {
+    this.http.get(urls.account + "/" + this.searchDestinationAccount, {
       withCredentials: true
     }).subscribe({
       next: (response:any) => {
