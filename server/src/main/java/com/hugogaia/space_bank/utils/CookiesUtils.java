@@ -23,11 +23,15 @@ public class CookiesUtils {
     }
 
     public void setTokenCookie(String token, HttpServletResponse response) {
+        String domain = "localhost";
+        if(System.getenv("prod") != null) {
+            domain = "onrender.com";
+        }
         Cookie cookie = new Cookie("token", token);
         cookie.setHttpOnly(true);
         cookie.setPath("/");
         cookie.setMaxAge(24 * 60 * 60);
-        response.setHeader("Set-Cookie", "SameSite=None;");
+        cookie.setDomain(domain);
         response.addCookie(cookie);
     }
 }
