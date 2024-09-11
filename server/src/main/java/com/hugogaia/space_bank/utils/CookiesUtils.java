@@ -25,7 +25,7 @@ public class CookiesUtils {
     public void setTokenCookie(String token, HttpServletResponse response) {
         String domain = "localhost";
         if(System.getenv("prod") != null) {
-            domain = ".onrender.com";
+            domain = "space-bank.onrender.com";
         }
         Cookie cookie = new Cookie("token", token);
         cookie.setHttpOnly(true);
