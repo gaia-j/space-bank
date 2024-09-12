@@ -1,10 +1,7 @@
 package com.hugogaia.space_bank.controllers;
 
-
 import com.hugogaia.space_bank.dtos.TransactionDTO;
 import com.hugogaia.space_bank.models.AccountModel;
-import com.hugogaia.space_bank.repositories.AccountRepository;
-import com.hugogaia.space_bank.repositories.TransactionRepository;
 import com.hugogaia.space_bank.services.TokenService;
 import com.hugogaia.space_bank.services.TransactionService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -23,19 +20,12 @@ import static com.hugogaia.space_bank.utils.ExceptionHandlers.handleValidationEx
 @RequestMapping("/transaction")
 public class TransactionController {
 
-    private final TransactionRepository transactionRepository;
     private final TransactionService transactionService;
-    private final AccountRepository accountRepository;
     private final TokenService tokenService;
 
     @Autowired
-    public TransactionController(
-            TransactionRepository transactionRepository, TransactionService transactionService,
-            AccountRepository accountRepository, TokenService tokenService
-    ) {
-        this.transactionRepository = transactionRepository;
+    public TransactionController(TransactionService transactionService, TokenService tokenService) {
         this.transactionService = transactionService;
-        this.accountRepository = accountRepository;
         this.tokenService = tokenService;
     }
 
@@ -85,8 +75,6 @@ public class TransactionController {
         } catch (Exception e) {
             return ResponseEntity.status(401).body(Map.of("error", e.getMessage()));
         }
-
-
 
     }
 }
