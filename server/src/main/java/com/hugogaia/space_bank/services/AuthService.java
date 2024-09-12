@@ -3,30 +3,28 @@ package com.hugogaia.space_bank.services;
 import com.hugogaia.space_bank.dtos.AuthDTO;
 import com.hugogaia.space_bank.dtos.RegisterDTO;
 import com.hugogaia.space_bank.exceptions.AccountAlreadyExistsException;
-import com.hugogaia.space_bank.infra.security.TokenService;
 import com.hugogaia.space_bank.models.AccountModel;
 import com.hugogaia.space_bank.repositories.AccountRepository;
 import com.hugogaia.space_bank.utils.CookiesUtils;
 import com.hugogaia.space_bank.utils.GenerateAccountCode;
 import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Map;
 import java.util.Random;
 
 @Service
 public class AuthService {
 
-
     private final AccountRepository accountRepository;
     private final TokenService tokenService;
     private final CookiesUtils cookiesUtils;
-    private final BCryptPasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
 
-    public AuthService(AccountRepository accountRepository, TokenService tokenService, CookiesUtils cookiesUtils, BCryptPasswordEncoder passwordEncoder) {
+    public AuthService(
+            AccountRepository accountRepository, TokenService tokenService,
+            CookiesUtils cookiesUtils, PasswordEncoder passwordEncoder) {
         this.accountRepository = accountRepository;
         this.tokenService = tokenService;
         this.cookiesUtils = cookiesUtils;
