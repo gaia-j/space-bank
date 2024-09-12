@@ -1,4 +1,4 @@
-package com.hugogaia.space_bank.services.exceptions;
+package com.hugogaia.space_bank.exceptions;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;

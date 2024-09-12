@@ -6,7 +6,7 @@ import com.hugogaia.space_bank.models.AccountModel;
 import com.hugogaia.space_bank.models.TransactionModel;
 import com.hugogaia.space_bank.repositories.AccountRepository;
 import com.hugogaia.space_bank.repositories.TransactionRepository;
-import com.hugogaia.space_bank.services.AuthorizationService;
+import com.hugogaia.space_bank.services.TokenService;
 import com.hugogaia.space_bank.utils.TaxIdUtils;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -26,22 +26,22 @@ public class TransactionController {
 
     private final TransactionRepository transactionRepository;
     private final AccountRepository accountRepository;
-    private final AuthorizationService authorizationService;
+    private final TokenService tokenService;
 
     @Autowired
     public TransactionController(
             TransactionRepository transactionRepository,
             AccountRepository accountRepository,
-            AuthorizationService authorizationService) {
+            TokenService tokenService) {
         this.transactionRepository = transactionRepository;
         this.accountRepository = accountRepository;
-        this.authorizationService = authorizationService;
+        this.tokenService = tokenService;
     }
 
     @GetMapping("/list")
     public ResponseEntity<List<Map<String, Object>>> listTransaction(HttpServletRequest request, HttpServletResponse response) {
 
-        AccountModel account = authorizationService.authorize(request);
+        AccountModel account = tokenService.authorize(request);
 
         Long accountId = account.getId();
 
@@ -85,7 +85,7 @@ public class TransactionController {
     @PostMapping("/send")
     public ResponseEntity<Map<String,String>> sendTransaction(@RequestBody @Valid TransactionDTO data, HttpServletRequest request, HttpServletResponse response) {
 
-        AccountModel originAccount = authorizationService.authorize(request);
+        AccountModel originAccount = tokenService.authorize(request);
 
         AccountModel destinationAccount = accountRepository.findByAccountCode(data.destinationAccountCode());
 
@@ -132,7 +132,7 @@ public class TransactionController {
     @GetMapping("/{id}")
     public ResponseEntity<Map<String, Object>> detailTransaction(@PathVariable UUID id, HttpServletRequest request, HttpServletResponse response) {
 
-        AccountModel account = authorizationService.authorize(request);
+        AccountModel account = tokenService.authorize(request);
 
         TransactionModel transaction = transactionRepository.findTransactionByExternalId(id);
 
